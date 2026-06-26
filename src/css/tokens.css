@@ -12,21 +12,21 @@
    * LAYER 1: PRIMITIVES
    * ───────────────────────────────────────────── */
 
-  /* Grey scale — dark grey base, not black */
-  --primitive-grey-1000: #111117;
-  --primitive-grey-950:  #16171e;
-  --primitive-grey-900:  #1c1d26;
-  --primitive-grey-850:  #21222d;
-  --primitive-grey-800:  #272838;
-  --primitive-grey-750:  #2d2e40;
-  --primitive-grey-700:  #343548;
-  --primitive-grey-600:  #454660;
-  --primitive-grey-500:  #5f6080;
-  --primitive-grey-400:  #8485a0;
-  --primitive-grey-300:  #a8a9c0;
-  --primitive-grey-200:  #cccde0;
-  --primitive-grey-100:  #e5e6f0;
-  --primitive-grey-50:   #f0f1f7;
+  /* Grey scale — proper dark grey, noticeably lighter than black */
+  --primitive-grey-1000: #1e1e24;
+  --primitive-grey-950:  #26272f;
+  --primitive-grey-900:  #2e2f38;
+  --primitive-grey-850:  #34353f;
+  --primitive-grey-800:  #3b3c47;
+  --primitive-grey-750:  #424351;
+  --primitive-grey-700:  #4e4f5e;
+  --primitive-grey-600:  #636475;
+  --primitive-grey-500:  #808194;
+  --primitive-grey-400:  #9fa0b2;
+  --primitive-grey-300:  #bcbdcc;
+  --primitive-grey-200:  #d5d6e2;
+  --primitive-grey-100:  #eaeaf2;
+  --primitive-grey-50:   #f3f3f8;
 
   /* Indigo — primary brand */
   --primitive-indigo-600: #4f51d4;
@@ -78,21 +78,21 @@
   --color-bg-surface:    var(--primitive-grey-850);
   --color-bg-raised:     var(--primitive-grey-800);
   --color-bg-overlay:    var(--primitive-grey-750);
-  --color-bg-hover:      rgba(255,255,255,0.04);
-  --color-bg-active:     rgba(255,255,255,0.07);
-  --color-bg-selected:   rgba(99,102,241,0.10);
+  --color-bg-hover:      rgba(255,255,255,0.05);
+  --color-bg-active:     rgba(255,255,255,0.08);
+  --color-bg-selected:   rgba(99,102,241,0.12);
 
   /* Borders */
-  --color-border-subtle:  rgba(255,255,255,0.06);
-  --color-border-default: rgba(255,255,255,0.09);
-  --color-border-strong:  rgba(255,255,255,0.14);
+  --color-border-subtle:  rgba(255,255,255,0.08);
+  --color-border-default: rgba(255,255,255,0.12);
+  --color-border-strong:  rgba(255,255,255,0.18);
   --color-border-focus:   rgba(99,102,241,0.60);
 
   /* Text */
-  --color-text-primary:   var(--primitive-grey-100);
-  --color-text-secondary: var(--primitive-grey-400);
-  --color-text-tertiary:  var(--primitive-grey-500);
-  --color-text-disabled:  var(--primitive-grey-600);
+  --color-text-primary:   #eeeef5;
+  --color-text-secondary: var(--primitive-grey-300);
+  --color-text-tertiary:  var(--primitive-grey-400);
+  --color-text-disabled:  var(--primitive-grey-500);
   --color-text-inverse:   #ffffff;
   --color-text-link:      var(--primitive-indigo-300);
 
