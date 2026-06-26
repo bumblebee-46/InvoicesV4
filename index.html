@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>V4 · Supply Chain</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%236366f1'/><text y='22' x='5' font-size='16' font-weight='600' fill='white' font-family='Inter,sans-serif'>V4</text></svg>"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="src/css/main.css"/>
+</head>
+<body>
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- Login screen -->
+  <div id="login-screen">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="brand-mark">V4</div>
+        <div>
+          <div class="brand-name">Supply Chain</div>
+          <div class="brand-sub">Loreal Professional · IN → UK</div>
+        </div>
+      </div>
+      <div class="login-title">Sign in to continue</div>
+      <div class="form-group">
+        <label>Username</label>
+        <input id="l-user" type="text" placeholder="Enter username" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()"/>
+      </div>
+      <div class="form-group" style="margin-top:12px">
+        <label>Password</label>
+        <input id="l-pass" type="password" placeholder="Enter password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
+      </div>
+      <div id="login-err" class="login-err" style="display:none">Incorrect username or password</div>
+      <button class="btn btn-primary" style="width:100%;margin-top:20px;justify-content:center;padding:10px" onclick="doLogin()">Sign in</button>
+    </div>
+  </div>
+
+  <!-- App -->
+  <div id="app" style="display:none">
+    <aside id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-mark">V4</div>
+        <div class="brand-text">
+          <span class="brand-name">Supply Chain</span>
+          <span class="brand-sub">Loreal · IN → UK</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <span class="nav-label">Overview</span>
+        <a class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </a>
+        <a class="nav-item" data-page="stock" onclick="navigate('stock')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Running Stock
+        </a>
+
+        <span class="nav-label">Invoices</span>
+        <a class="nav-item" data-page="inv-LOR_AARA" onclick="navigate('inv-LOR_AARA')">
+          <span class="nav-pip" style="background:#6366f1"></span>Loreal → Aara
+        </a>
+        <a class="nav-item" data-page="inv-LOR_ADITI" onclick="navigate('inv-LOR_ADITI')">
+          <span class="nav-pip" style="background:#8b5cf6"></span>Loreal → Aditi
+        </a>
+        <a class="nav-item" data-page="inv-LOR_OTHERS" onclick="navigate('inv-LOR_OTHERS')">
+          <span class="nav-pip" style="background:#f59e0b"></span>Loreal → Others
+        </a>
+        <a class="nav-item" data-page="inv-AARA_V4" onclick="navigate('inv-AARA_V4')">
+          <span class="nav-pip" style="background:#06b6d4"></span>Aara → V4
+        </a>
+        <a class="nav-item" data-page="inv-ADITI_V4" onclick="navigate('inv-ADITI_V4')">
+          <span class="nav-pip" style="background:#a78bfa"></span>Aditi → V4
+        </a>
+        <a class="nav-item" data-page="inv-OTHERS_V4" onclick="navigate('inv-OTHERS_V4')">
+          <span class="nav-pip" style="background:#fb923c"></span>Others → V4
+        </a>
+        <a class="nav-item" data-page="inv-V4_GW" onclick="navigate('inv-V4_GW')">
+          <span class="nav-pip" style="background:#10b981"></span>V4 → GW
+        </a>
+
+        <span class="nav-label">Reconciliation</span>
+        <a class="nav-item" data-page="tally" onclick="navigate('tally')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Lot Tally
+        </a>
+
+        <span class="nav-label">Config</span>
+        <a class="nav-item" data-page="skus" onclick="navigate('skus')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+          SKU Master
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="footer-btn" onclick="exportAll()"><?xml version="1.0"?><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export data</button>
+        <button class="footer-btn" onclick="triggerImport()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Import data</button>
+        <button class="footer-btn" onclick="doLogout()" style="color:#fb7185;border-color:rgba(244,63,94,0.2)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Sign out</button>
+      </div>
+    </aside>
+
+    <main id="main">
+      <div id="page-root"></div>
+    </main>
+  </div>
+
+  <!-- Drawer -->
+  <div id="drawer-overlay" onclick="closeDrawer()"></div>
+  <aside id="drawer"><div id="drawer-inner"></div></aside>
+
+  <!-- Toast -->
+  <div id="toast-container"></div>
+
+  <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImport(event)"/>
+
+  <!-- SheetJS for Excel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <script src="src/js/auth.js"></script>
+  <script src="src/js/store.js"></script>
+  <script src="src/js/icons.js"></script>
+  <script src="src/js/utils.js"></script>
+  <script src="src/js/drawer.js"></script>
+  <script src="src/js/pages/dashboard.js"></script>
+  <script src="src/js/pages/invoices.js"></script>
+  <script src="src/js/pages/tally.js"></script>
+  <script src="src/js/pages/stock.js"></script>
+  <script src="src/js/pages/skus.js"></script>
+  <script src="src/js/app.js"></script>
+</body>
+</html>
