@@ -1,155 +1,186 @@
 'use strict';
 const Store = (() => {
-  const K = { skus: 'v4_skus_v3', invoices: 'v4_invoices_v3' };
+  const K = { skus:'v4_skus_v4', lots:'v4_lots_v4' };
 
-  // ── Real SKUs from your tracking file ─────────────────────────
-  const DEFAULTS = [
+  const DEFAULT_SKUS = [
     // Shampoo 300ml
-    { code: 'SH-METALDX',    name: 'Metal DX Shampoo 300ml',             cat: 'Shampoo 300ml' },
-    { code: 'SH-ADISC',      name: 'A-Disc Shampoo 300ml',               cat: 'Shampoo 300ml' },
-    { code: 'SH-LISSUNL',    name: 'Liss Unlimited Shampoo 300ml',       cat: 'Shampoo 300ml' },
-    { code: 'SH-AOILY',      name: 'A-Oily Shampoo 300ml',               cat: 'Shampoo 300ml' },
-    { code: 'SH-VITAMINO',   name: 'Vitamino Shampoo 300ml',             cat: 'Shampoo 300ml' },
-    { code: 'SH-ABSREP',     name: 'Abs Rep Shampoo 300ml',              cat: 'Shampoo 300ml' },
-    { code: 'SH-ANTIDAND',   name: 'Anti-Dandruff Shampoo 300ml',        cat: 'Shampoo 300ml' },
-    { code: 'SH-SILVER',     name: 'Silver Shampoo 300ml',               cat: 'Shampoo 300ml' },
-    { code: 'SH-PROLONGER',  name: 'Prolonger Shampoo 300ml',            cat: 'Shampoo 300ml' },
-    { code: 'SH-INFORCER',   name: 'Inforcer Shampoo 300ml',             cat: 'Shampoo 300ml' },
-    { code: 'SH-ABSREPMOL',  name: 'Abs Rep Molecular Shampoo 300ml',    cat: 'Shampoo 300ml' },
-    { code: 'SH-XTENSO250',  name: 'Xtensо Care Shampoo 250ml',          cat: 'Shampoo 300ml' },
-    { code: 'SH-VITSPECOL',  name: 'Vit Spec Col Shampoo 300ml',         cat: 'Shampoo 300ml' },
+    {id:'SH-METALDX',   lorCode:'', ean:'', name:'Metal DX Shampoo 300ml',             cat:'Shampoo 300ml'},
+    {id:'SH-ADISC',     lorCode:'', ean:'', name:'A-Disc Shampoo 300ml',               cat:'Shampoo 300ml'},
+    {id:'SH-LISSUNL',   lorCode:'', ean:'', name:'Liss Unlimited Shampoo 300ml',       cat:'Shampoo 300ml'},
+    {id:'SH-AOILY',     lorCode:'', ean:'', name:'A-Oily Shampoo 300ml',               cat:'Shampoo 300ml'},
+    {id:'SH-VITAMINO',  lorCode:'', ean:'', name:'Vitamino Shampoo 300ml',             cat:'Shampoo 300ml'},
+    {id:'SH-ABSREP',    lorCode:'', ean:'', name:'Abs Rep Shampoo 300ml',              cat:'Shampoo 300ml'},
+    {id:'SH-ANTIDAND',  lorCode:'', ean:'', name:'Anti-Dandruff Shampoo 300ml',        cat:'Shampoo 300ml'},
+    {id:'SH-SILVER',    lorCode:'', ean:'', name:'Silver Shampoo 300ml',               cat:'Shampoo 300ml'},
+    {id:'SH-PROLONGER', lorCode:'', ean:'', name:'Prolonger Shampoo 300ml',            cat:'Shampoo 300ml'},
+    {id:'SH-INFORCER',  lorCode:'', ean:'', name:'Inforcer Shampoo 300ml',             cat:'Shampoo 300ml'},
+    {id:'SH-ABSREPMOL', lorCode:'', ean:'', name:'Abs Rep Molecular Shampoo 300ml',    cat:'Shampoo 300ml'},
+    {id:'SH-XTENSO250', lorCode:'', ean:'', name:'Xtensо Care Shampoo 250ml',          cat:'Shampoo 300ml'},
+    {id:'SH-VITSPECOL', lorCode:'', ean:'', name:'Vit Spec Col Shampoo 300ml',         cat:'Shampoo 300ml'},
     // Mask 250ml
-    { code: 'MK-METALDX250', name: 'Metal DX Mask 250ml',                cat: 'Mask 250ml' },
-    { code: 'MK-PROLONGER',  name: 'Prolonger Mask 250ml',               cat: 'Mask 250ml' },
-    { code: 'MK-AOILY250',   name: 'A-Oily Mask 250ml',                  cat: 'Mask 250ml' },
-    { code: 'MK-VITAMINO',   name: 'Vitamino Mask 250ml',                cat: 'Mask 250ml' },
-    { code: 'MK-INFORCER',   name: 'Inforcer Mask 250ml',                cat: 'Mask 250ml' },
-    { code: 'MK-ABSREP250',  name: 'Abs Rep Mask 250ml',                 cat: 'Mask 250ml' },
-    { code: 'MK-LISSUNL250', name: 'Liss Unlimited Mask 250ml',          cat: 'Mask 250ml' },
-    { code: 'MK-XTENSO196',  name: 'Xtensо Care Mask 196gm',             cat: 'Mask 250ml' },
-    { code: 'MK-ARMRINSE',   name: 'ARM Rinse Off Mask 250ml',           cat: 'Mask 250ml' },
-    { code: 'MK-CURLEXP',    name: 'Curl Expression Intense Mask 250ml', cat: 'Mask 250ml' },
-    { code: 'MK-VITSPECOL',  name: 'Vit Spec Col Mask 250ml',            cat: 'Mask 250ml' },
-    // Mask 500ml / Serums / Oils
-    { code: 'MK-METALDX500', name: 'Metal DX Mask 500ml',                cat: 'Mask 500ml & Serums' },
-    { code: 'MK-ABSREP490',  name: 'Abs Rep Mask 490ml',                 cat: 'Mask 500ml & Serums' },
-    { code: 'SR-LISSUNL125', name: 'Liss Unlimited Serum 125ml',         cat: 'Mask 500ml & Serums' },
-    { code: 'OL-50ML',       name: 'Oil 50ml',                           cat: 'Mask 500ml & Serums' },
-    { code: 'OL-90ML',       name: 'Oil 90ml',                           cat: 'Mask 500ml & Serums' },
-    { code: 'OL-RENOCONST',  name: 'Reno Const Oil 150ml',               cat: 'Mask 500ml & Serums' },
-    { code: 'TR-LIQTREAT',   name: 'Liq Treat 250ml',                    cat: 'Mask 500ml & Serums' },
-    { code: 'TR-HOMMEMAT',   name: 'Homme Mat 80ml',                     cat: 'Mask 500ml & Serums' },
-    { code: 'TR-TNABEACH',   name: 'TNA Beach Waves 150ml',              cat: 'Mask 500ml & Serums' },
-    { code: 'TR-SIRENWAV',   name: 'Siren Waves',                        cat: 'Mask 500ml & Serums' },
-    { code: 'TR-RENODNS',    name: 'Reno Density 100ml',                 cat: 'Mask 500ml & Serums' },
-    { code: 'TR-HOMECLAY',   name: 'Home Clay 50ml',                     cat: 'Mask 500ml & Serums' },
-    { code: 'TR-HOMMESCL',   name: 'Homme Sculpt 150ml',                 cat: 'Mask 500ml & Serums' },
-    { code: 'TR-TNARENO',    name: 'TNA Reno Liss Control 150ml',        cat: 'Mask 500ml & Serums' },
-    { code: 'SR-XTENSO50',   name: 'Xtensо Reno Serum 50ml',             cat: 'Mask 500ml & Serums' },
-    { code: 'TR-ADISCF',     name: 'A-Discf Treat 200ml',                cat: 'Mask 500ml & Serums' },
+    {id:'MK-METALDX250',lorCode:'', ean:'', name:'Metal DX Mask 250ml',                cat:'Mask 250ml'},
+    {id:'MK-PROLONGER', lorCode:'', ean:'', name:'Prolonger Mask 250ml',               cat:'Mask 250ml'},
+    {id:'MK-AOILY250',  lorCode:'', ean:'', name:'A-Oily Mask 250ml',                  cat:'Mask 250ml'},
+    {id:'MK-VITAMINO',  lorCode:'', ean:'', name:'Vitamino Mask 250ml',                cat:'Mask 250ml'},
+    {id:'MK-INFORCER',  lorCode:'', ean:'', name:'Inforcer Mask 250ml',                cat:'Mask 250ml'},
+    {id:'MK-ABSREP250', lorCode:'', ean:'', name:'Abs Rep Mask 250ml',                 cat:'Mask 250ml'},
+    {id:'MK-LISSUNL250',lorCode:'', ean:'', name:'Liss Unlimited Mask 250ml',          cat:'Mask 250ml'},
+    {id:'MK-XTENSO196', lorCode:'', ean:'', name:'Xtensо Care Mask 196gm',             cat:'Mask 250ml'},
+    {id:'MK-ARMRINSE',  lorCode:'', ean:'', name:'ARM Rinse Off Mask 250ml',           cat:'Mask 250ml'},
+    {id:'MK-CURLEXP',   lorCode:'', ean:'', name:'Curl Expression Intense Mask 250ml', cat:'Mask 250ml'},
+    {id:'MK-VITSPECOL', lorCode:'', ean:'', name:'Vit Spec Col Mask 250ml',            cat:'Mask 250ml'},
+    // Mask 500ml & Serums
+    {id:'MK-METALDX500',lorCode:'', ean:'', name:'Metal DX Mask 500ml',                cat:'Mask 500ml & Serums'},
+    {id:'MK-ABSREP490', lorCode:'', ean:'', name:'Abs Rep Mask 490ml',                 cat:'Mask 500ml & Serums'},
+    {id:'SR-LISSUNL125',lorCode:'', ean:'', name:'Liss Unlimited Serum 125ml',         cat:'Mask 500ml & Serums'},
+    {id:'OL-50ML',      lorCode:'', ean:'', name:'Oil 50ml',                           cat:'Mask 500ml & Serums'},
+    {id:'OL-90ML',      lorCode:'', ean:'', name:'Oil 90ml',                           cat:'Mask 500ml & Serums'},
+    {id:'OL-RENOCONST', lorCode:'', ean:'', name:'Reno Const Oil 150ml',               cat:'Mask 500ml & Serums'},
+    {id:'TR-LIQTREAT',  lorCode:'', ean:'', name:'Liq Treat 250ml',                    cat:'Mask 500ml & Serums'},
+    {id:'TR-HOMMEMAT',  lorCode:'', ean:'', name:'Homme Mat 80ml',                     cat:'Mask 500ml & Serums'},
+    {id:'TR-TNABEACH',  lorCode:'', ean:'', name:'TNA Beach Waves 150ml',              cat:'Mask 500ml & Serums'},
+    {id:'TR-SIRENWAV',  lorCode:'', ean:'', name:'Siren Waves',                        cat:'Mask 500ml & Serums'},
+    {id:'TR-RENODNS',   lorCode:'', ean:'', name:'Reno Density 100ml',                 cat:'Mask 500ml & Serums'},
+    {id:'TR-HOMECLAY',  lorCode:'', ean:'', name:'Home Clay 50ml',                     cat:'Mask 500ml & Serums'},
+    {id:'TR-HOMMESCL',  lorCode:'', ean:'', name:'Homme Sculpt 150ml',                 cat:'Mask 500ml & Serums'},
+    {id:'TR-TNARENO',   lorCode:'', ean:'', name:'TNA Reno Liss Control 150ml',        cat:'Mask 500ml & Serums'},
+    {id:'SR-XTENSO50',  lorCode:'', ean:'', name:'Xtensо Reno Serum 50ml',             cat:'Mask 500ml & Serums'},
+    {id:'TR-ADISCF',    lorCode:'', ean:'', name:'A-Discf Treat 200ml',                cat:'Mask 500ml & Serums'},
     // Hair Color
-    { code: 'HC-MAJ3',       name: 'Majirel 3 100ml',                    cat: 'Hair Color' },
-    { code: 'HC-MAJ4',       name: 'Majirel 4 100ml',                    cat: 'Hair Color' },
-    { code: 'HC-MAJ5',       name: 'Majirel 5 100ml',                    cat: 'Hair Color' },
-    { code: 'HC-MAJ6',       name: 'Majirel 6 100ml',                    cat: 'Hair Color' },
-    { code: 'HC-MAJ63',      name: 'Majirel 6.3 100ml',                  cat: 'Hair Color' },
-    { code: 'HC-MAJ7',       name: 'Majirel 7 100ml',                    cat: 'Hair Color' },
-    { code: 'HC-MAJ74',      name: 'Majirel 7.4 100ml',                  cat: 'Hair Color' },
-    { code: 'HC-MAJ8',       name: 'Majirel 8 100ml',                    cat: 'Hair Color' },
-    { code: 'HC-MAJ834',     name: 'Majirel 8.34 100ml',                 cat: 'Hair Color' },
-    { code: 'HC-INOA10V',    name: 'Inoa Oxydant 10 Vol 1L',             cat: 'Hair Color' },
-    { code: 'HC-OREOR30',    name: 'Oreor 30 Vol Creme Developer 1L',    cat: 'Hair Color' },
+    {id:'HC-MAJ3',      lorCode:'', ean:'', name:'Majirel 3 100ml',                    cat:'Hair Color'},
+    {id:'HC-MAJ4',      lorCode:'', ean:'', name:'Majirel 4 100ml',                    cat:'Hair Color'},
+    {id:'HC-MAJ5',      lorCode:'', ean:'', name:'Majirel 5 100ml',                    cat:'Hair Color'},
+    {id:'HC-MAJ6',      lorCode:'', ean:'', name:'Majirel 6 100ml',                    cat:'Hair Color'},
+    {id:'HC-MAJ63',     lorCode:'', ean:'', name:'Majirel 6.3 100ml',                  cat:'Hair Color'},
+    {id:'HC-MAJ7',      lorCode:'', ean:'', name:'Majirel 7 100ml',                    cat:'Hair Color'},
+    {id:'HC-MAJ74',     lorCode:'', ean:'', name:'Majirel 7.4 100ml',                  cat:'Hair Color'},
+    {id:'HC-MAJ8',      lorCode:'', ean:'', name:'Majirel 8 100ml',                    cat:'Hair Color'},
+    {id:'HC-MAJ834',    lorCode:'', ean:'', name:'Majirel 8.34 100ml',                 cat:'Hair Color'},
+    {id:'HC-INOA10V',   lorCode:'', ean:'', name:'Inoa Oxydant 10 Vol 1L',             cat:'Hair Color'},
+    {id:'HC-OREOR30',   lorCode:'', ean:'', name:'Oreor 30 Vol Creme Developer 1L',    cat:'Hair Color'},
   ];
 
-  let skus = [], invoices = [];
+  let skus = [], lots = [];
 
   function load() {
-    try { const s = localStorage.getItem(K.skus); skus = s ? JSON.parse(s) : [...DEFAULTS]; } catch { skus = [...DEFAULTS]; }
-    try { const i = localStorage.getItem(K.invoices); invoices = i ? JSON.parse(i) : []; } catch { invoices = []; }
+    try { const s = localStorage.getItem(K.skus); skus = s ? JSON.parse(s) : DEFAULT_SKUS.map(x=>({...x})); } catch { skus = DEFAULT_SKUS.map(x=>({...x})); }
+    try { const l = localStorage.getItem(K.lots); lots = l ? JSON.parse(l) : []; } catch { lots = []; }
   }
-
   function save() {
     localStorage.setItem(K.skus, JSON.stringify(skus));
-    localStorage.setItem(K.invoices, JSON.stringify(invoices));
+    localStorage.setItem(K.lots, JSON.stringify(lots));
   }
 
-  // ── SKUs ──────────────────────────────────────────────────────
+  // SKUs
   function getSKUs() { return [...skus]; }
+  function getSKUMap() { const m={}; skus.forEach(s=>m[s.id]=s); return m; }
   function getSKUsByCategory() {
-    const cats = {};
-    skus.forEach(s => {
-      const c = s.cat || 'Other';
-      if (!cats[c]) cats[c] = [];
-      cats[c].push(s);
-    });
-    return cats;
+    const c={}; skus.forEach(s=>{ const k=s.cat||'Other'; if(!c[k])c[k]=[]; c[k].push(s); }); return c;
   }
-  function addSKU(code, name, cat) {
-    code = code.trim().toUpperCase(); name = name.trim(); cat = (cat || 'Other').trim();
-    if (!code || !name) throw new Error('Code and name required');
-    if (skus.find(s => s.code === code)) throw new Error('SKU code already exists');
-    skus.push({ code, name, cat }); save();
+  function getSKU(id) { return skus.find(s=>s.id===id); }
+  function addSKU(d) {
+    d.id = (d.id||'').trim().toUpperCase();
+    if(!d.id||!d.name) throw new Error('ID and name required');
+    if(skus.find(s=>s.id===d.id)) throw new Error('SKU ID already exists');
+    skus.push({id:d.id,lorCode:d.lorCode||'',ean:d.ean||'',name:d.name.trim(),cat:d.cat||'Other'});
+    save();
   }
-  function deleteSKU(code) { skus = skus.filter(s => s.code !== code); save(); }
+  function updateSKU(id, patch) {
+    const i=skus.findIndex(s=>s.id===id); if(i<0) throw new Error('Not found');
+    skus[i]={...skus[i],...patch}; save();
+  }
+  function deleteSKU(id) { skus=skus.filter(s=>s.id!==id); save(); }
   function importSKUs(rows) {
-    let n = 0;
-    rows.forEach(({ code, name, cat }) => {
-      code = (code || '').trim().toUpperCase(); name = (name || '').trim();
-      if (code && name && !skus.find(s => s.code === code)) { skus.push({ code, name, cat: cat || 'Other' }); n++; }
+    let n=0;
+    rows.forEach(r=>{
+      const id=(r.id||r.code||'').trim().toUpperCase(), name=(r.name||'').trim();
+      if(!id||!name) return;
+      const i=skus.findIndex(s=>s.id===id);
+      if(i>=0) { skus[i]={...skus[i],...r,id}; }
+      else { skus.push({id,lorCode:r.lorCode||'',ean:r.ean||'',name,cat:r.cat||'Other'}); n++; }
     });
     save(); return n;
   }
 
-  // ── Invoices ──────────────────────────────────────────────────
-  function getInvoices(type) { return type ? invoices.filter(i => i.type === type) : [...invoices]; }
-  function getByLot(lot) { return invoices.filter(i => i.lot === lot); }
-  function getLots() { return [...new Set(invoices.map(i => i.lot).filter(Boolean))].sort(); }
-  function addInvoice({ num, date, type, lot, lines, supplierName }) {
-    num = num.trim(); lot = (lot || '').trim().toUpperCase();
-    if (!num || !date || !type || !lot) throw new Error('Invoice no., date, type and lot required');
-    if (invoices.find(i => i.num === num && i.type === type)) throw new Error(`Invoice ${num} already exists for this flow`);
-    const inv = { id: Date.now(), num, date, type, lot, lines: lines || [], supplierName: supplierName || null, createdAt: new Date().toISOString() };
-    invoices.push(inv); save(); return inv;
+  // LOTs
+  // Each lot: { id, name, dist (distributor name), notes, status, createdAt, invoices:[], lotNotes:[] }
+  // Each invoice: { id, num, date, type (LOR_DIST|DIST_V4|V4_GW), lines:[{skuId,qty}], supplierName }
+  // status computed by validator: open|validated|failed|partial
+  function getLots() { return [...lots].sort((a,b)=>b.createdAt-a.createdAt); }
+  function getLot(id) { return lots.find(l=>l.id===id); }
+  function createLot({name, dist, notes}={}) {
+    name=(name||'').trim().toUpperCase();
+    if(!name) throw new Error('Lot name required');
+    if(lots.find(l=>l.name===name)) throw new Error(`Lot ${name} already exists`);
+    const lot={
+      id:'lot_'+Date.now(), name, dist:dist||'', notes:notes||'',
+      status:'open', createdAt:Date.now(), updatedAt:Date.now(),
+      invoices:[], lotNotes:[],
+      // computed by validator:
+      validation:null,
+    };
+    lots.push(lot); save(); return lot;
   }
-  function deleteInvoice(id) { invoices = invoices.filter(i => i.id !== id); save(); }
-
+  function updateLot(id, patch) {
+    const i=lots.findIndex(l=>l.id===id); if(i<0) throw new Error('Not found');
+    lots[i]={...lots[i],...patch,updatedAt:Date.now()}; save(); return lots[i];
+  }
+  function deleteLot(id) { lots=lots.filter(l=>l.id!==id); save(); }
+  function addInvoice(lotId, inv) {
+    const lot=getLot(lotId); if(!lot) throw new Error('Lot not found');
+    if(!inv.num||!inv.date||!inv.type) throw new Error('Number, date and type required');
+    inv.num=inv.num.trim();
+    if(lot.invoices.find(i=>i.num===inv.num&&i.type===inv.type)) throw new Error(`Invoice ${inv.num} already exists`);
+    const entry={id:'inv_'+Date.now(),num:inv.num,date:inv.date,type:inv.type,
+      lines:(inv.lines||[]).filter(l=>l.qty>0),
+      supplierName:inv.supplierName||'',createdAt:Date.now()};
+    lot.invoices.push(entry); lot.updatedAt=Date.now(); save(); return entry;
+  }
+  function deleteInvoice(lotId, invId) {
+    const lot=getLot(lotId); if(!lot) return;
+    lot.invoices=lot.invoices.filter(i=>i.id!==invId); lot.updatedAt=Date.now(); save();
+  }
+  function addNote(lotId, text) {
+    const lot=getLot(lotId); if(!lot) return;
+    const note={id:'n_'+Date.now(),text:text.trim(),createdAt:Date.now()};
+    lot.lotNotes.push(note); lot.updatedAt=Date.now(); save(); return note;
+  }
   function getStats() {
     return {
-      total: invoices.length, lots: getLots().length, skus: skus.length,
-      byType: {
-        LOR_AARA: invoices.filter(i => i.type === 'LOR_AARA').length,
-        LOR_ADITI: invoices.filter(i => i.type === 'LOR_ADITI').length,
-        LOR_OTHERS: invoices.filter(i => i.type === 'LOR_OTHERS').length,
-        AARA_V4: invoices.filter(i => i.type === 'AARA_V4').length,
-        ADITI_V4: invoices.filter(i => i.type === 'ADITI_V4').length,
-        OTHERS_V4: invoices.filter(i => i.type === 'OTHERS_V4').length,
-        V4_GW: invoices.filter(i => i.type === 'V4_GW').length,
-      }
+      total:lots.length,
+      validated:lots.filter(l=>l.status==='validated').length,
+      failed:lots.filter(l=>l.status==='failed').length,
+      open:lots.filter(l=>l.status==='open').length,
+      skus:skus.length,
     };
   }
-
-  // Running stock: cumulative Dist→V4 minus V4→GW per SKU across all lots
+  // Running stock: cumulative DIST→V4 minus V4→GW per SKU
   function getRunningStock() {
-    const distV4 = {}, v4GW = {};
-    invoices.filter(i => ['AARA_V4', 'ADITI_V4', 'OTHERS_V4'].includes(i.type))
-      .forEach(inv => (inv.lines || []).forEach(l => { distV4[l.code] = (distV4[l.code] || 0) + (l.qty || 0); }));
-    invoices.filter(i => i.type === 'V4_GW')
-      .forEach(inv => (inv.lines || []).forEach(l => { v4GW[l.code] = (v4GW[l.code] || 0) + (l.qty || 0); }));
-    const all = new Set([...Object.keys(distV4), ...Object.keys(v4GW)]);
-    return [...all].map(code => {
-      const recv = distV4[code] || 0, sent = v4GW[code] || 0;
-      return { code, recv, sent, balance: recv - sent };
+    const dv={},gw={};
+    lots.forEach(lot=>{
+      lot.invoices.filter(i=>i.type==='DIST_V4').forEach(inv=>inv.lines.forEach(l=>{dv[l.skuId]=(dv[l.skuId]||0)+l.qty}));
+      lot.invoices.filter(i=>i.type==='V4_GW').forEach(inv=>inv.lines.forEach(l=>{gw[l.skuId]=(gw[l.skuId]||0)+l.qty}));
     });
+    const all=new Set([...Object.keys(dv),...Object.keys(gw)]);
+    return [...all].map(skuId=>({skuId,recv:dv[skuId]||0,sent:gw[skuId]||0,balance:(dv[skuId]||0)-(gw[skuId]||0)}));
   }
-
-  function toJSON() { return JSON.stringify({ skus, invoices }, null, 2); }
-  function fromJSON(str) {
-    const d = JSON.parse(str);
-    if (d.skus) skus = d.skus;
-    if (d.invoices) invoices = d.invoices;
-    save();
-  }
-
+  function toJSON() { return JSON.stringify({v:2,skus,lots},null,2); }
+  function fromJSON(str) { const d=JSON.parse(str); if(d.skus)skus=d.skus; if(d.lots)lots=d.lots; save(); }
   load();
-  return { getSKUs, getSKUsByCategory, addSKU, deleteSKU, importSKUs, getInvoices, getByLot, getLots, addInvoice, deleteInvoice, getStats, getRunningStock, toJSON, fromJSON };
+  return {getSKUs,getSKUMap,getSKUsByCategory,getSKU,addSKU,updateSKU,deleteSKU,importSKUs,
+    getLots,getLot,createLot,updateLot,deleteLot,addInvoice,deleteInvoice,addNote,getStats,getRunningStock,toJSON,fromJSON};
 })();
+
+// Invoice type metadata
+const INV_TYPE = {
+  LOR_DIST:{ label:'L\'Oréal → Distributor', short:'Loreal→Dist', badge:'bg-indigo', color:'#a5b4fc' },
+  DIST_V4: { label:'Distributor → V4',       short:'Dist→V4',    badge:'bg-cyan',   color:'#22d3ee' },
+  V4_GW:   { label:'V4 → GW',               short:'V4→GW',      badge:'bg-green',  color:'#4ade80' },
+};
+
+const LOT_STATUS = {
+  open:       { label:'Open',       badge:'bg-gray',  icon:'clock'  },
+  validated:  { label:'Validated',  badge:'bg-green', icon:'check'  },
+  failed:     { label:'Failed',     badge:'bg-red',   icon:'x'      },
+  partial:    { label:'Partial',    badge:'bg-amber', icon:'warning'},
+};

@@ -3,134 +3,108 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>V4 · Supply Chain</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%236366f1'/><text y='22' x='5' font-size='16' font-weight='600' fill='white' font-family='Inter,sans-serif'>V4</text></svg>"/>
+  <title>V4 · Supply Chain Validator</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%236366f1'/><text y='22' x='4' font-size='15' font-weight='700' fill='white' font-family='Inter,sans-serif'>V4</text></svg>"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="src/css/main.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="src/css/app.css"/>
 </head>
 <body>
-  <div class="bg-orbs" aria-hidden="true">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-  </div>
 
-  <!-- Login screen -->
-  <div id="login-screen">
-    <div class="login-card">
-      <div class="login-brand">
-        <div class="brand-mark">V4</div>
-        <div>
-          <div class="brand-name">Supply Chain</div>
-          <div class="brand-sub">Loreal Professional · IN → UK</div>
-        </div>
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="logo-mark">V4</div>
+      <div>
+        <div class="login-title">Supply Chain Validator</div>
+        <div class="login-sub">L'Oréal Professional · India → UK</div>
       </div>
-      <div class="login-title">Sign in to continue</div>
-      <div class="form-group">
-        <label>Username</label>
-        <input id="l-user" type="text" placeholder="Enter username" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()"/>
-      </div>
-      <div class="form-group" style="margin-top:12px">
-        <label>Password</label>
-        <input id="l-pass" type="password" placeholder="Enter password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
-      </div>
-      <div id="login-err" class="login-err" style="display:none">Incorrect username or password</div>
-      <button class="btn btn-primary" style="width:100%;margin-top:20px;justify-content:center;padding:10px" onclick="doLogin()">Sign in</button>
     </div>
+    <div class="field-group">
+      <label class="field-label">Username</label>
+      <input class="field-input" id="l-user" type="text" placeholder="Username" autocomplete="username" onkeydown="if(event.key==='Enter')$id('l-pass').focus()"/>
+    </div>
+    <div class="field-group" style="margin-top:12px">
+      <label class="field-label">Password</label>
+      <input class="field-input" id="l-pass" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')Auth.login()"/>
+    </div>
+    <div id="login-err" class="login-err" hidden>Incorrect credentials</div>
+    <button class="btn btn-primary" style="width:100%;margin-top:18px;justify-content:center" onclick="Auth.login()">Sign in</button>
   </div>
+</div>
 
-  <!-- App -->
-  <div id="app" style="display:none">
-    <aside id="sidebar">
-      <div class="sidebar-brand">
-        <div class="brand-mark">V4</div>
-        <div class="brand-text">
-          <span class="brand-name">Supply Chain</span>
-          <span class="brand-sub">Loreal · IN → UK</span>
-        </div>
+<!-- APP -->
+<div id="app" hidden>
+  <aside id="sidebar">
+    <div class="sb-brand">
+      <div class="logo-mark sm">V4</div>
+      <div>
+        <div class="sb-title">Supply Chain</div>
+        <div class="sb-sub">Validator</div>
       </div>
-      <nav class="sidebar-nav">
-        <span class="nav-label">Overview</span>
-        <a class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
-          Dashboard
-        </a>
-        <a class="nav-item" data-page="stock" onclick="navigate('stock')">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          Running Stock
-        </a>
+    </div>
+    <nav class="sb-nav">
+      <a class="sb-link active" data-page="dashboard" onclick="Nav.go('dashboard')">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5"/></svg>
+        Dashboard
+      </a>
+      <a class="sb-link" data-page="lots" onclick="Nav.go('lots')">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6l7-3 7 3v8l-7 3-7-3V6z"/><path d="M10 3v14M3 6l7 3 7-3"/></svg>
+        Shipment Lots
+        <span class="sb-pill" id="sb-lots">0</span>
+      </a>
+      <a class="sb-link" data-page="skus" onclick="Nav.go('skus')">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="16" height="12" rx="1.5"/><line x1="2" y1="9" x2="18" y2="9"/><line x1="6" y1="9" x2="6" y2="17"/></svg>
+        SKU Master
+        <span class="sb-pill" id="sb-skus">0</span>
+      </a>
+    </nav>
+    <div class="sb-footer">
+      <button class="sb-btn" onclick="Data.exportBackup()">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 13V3m-4 6l4 4 4-4"/><path d="M3 15v1a1 1 0 001 1h12a1 1 0 001-1v-1"/></svg>
+        Export backup
+      </button>
+      <button class="sb-btn" onclick="$id('bk-file').click()">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 7v10m-4-4l4 4 4-4"/><path d="M3 5V4a1 1 0 011-1h12a1 1 0 011 1v1"/></svg>
+        Import backup
+      </button>
+      <button class="sb-btn danger" onclick="Auth.logout()">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 3h4a1 1 0 011 1v12a1 1 0 01-1 1h-4M8 14l4-4-4-4M12 10H2"/></svg>
+        Sign out
+      </button>
+    </div>
+  </aside>
 
-        <span class="nav-label">Invoices</span>
-        <a class="nav-item" data-page="inv-LOR_AARA" onclick="navigate('inv-LOR_AARA')">
-          <span class="nav-pip" style="background:#6366f1"></span>Loreal → Aara
-        </a>
-        <a class="nav-item" data-page="inv-LOR_ADITI" onclick="navigate('inv-LOR_ADITI')">
-          <span class="nav-pip" style="background:#8b5cf6"></span>Loreal → Aditi
-        </a>
-        <a class="nav-item" data-page="inv-LOR_OTHERS" onclick="navigate('inv-LOR_OTHERS')">
-          <span class="nav-pip" style="background:#f59e0b"></span>Loreal → Others
-        </a>
-        <a class="nav-item" data-page="inv-AARA_V4" onclick="navigate('inv-AARA_V4')">
-          <span class="nav-pip" style="background:#06b6d4"></span>Aara → V4
-        </a>
-        <a class="nav-item" data-page="inv-ADITI_V4" onclick="navigate('inv-ADITI_V4')">
-          <span class="nav-pip" style="background:#a78bfa"></span>Aditi → V4
-        </a>
-        <a class="nav-item" data-page="inv-OTHERS_V4" onclick="navigate('inv-OTHERS_V4')">
-          <span class="nav-pip" style="background:#fb923c"></span>Others → V4
-        </a>
-        <a class="nav-item" data-page="inv-V4_GW" onclick="navigate('inv-V4_GW')">
-          <span class="nav-pip" style="background:#10b981"></span>V4 → GW
-        </a>
+  <main id="main">
+    <div id="page-root"></div>
+  </main>
+</div>
 
-        <span class="nav-label">Reconciliation</span>
-        <a class="nav-item" data-page="tally" onclick="navigate('tally')">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-          Lot Tally
-        </a>
+<!-- DRAWER -->
+<div id="drawer-bg" onclick="Drawer.close()"></div>
+<div id="drawer">
+  <div id="drawer-inner"></div>
+</div>
 
-        <span class="nav-label">Config</span>
-        <a class="nav-item" data-page="skus" onclick="navigate('skus')">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
-          SKU Master
-        </a>
-      </nav>
-      <div class="sidebar-footer">
-        <button class="footer-btn" onclick="exportAll()"><?xml version="1.0"?><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export data</button>
-        <button class="footer-btn" onclick="triggerImport()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Import data</button>
-        <button class="footer-btn" onclick="doLogout()" style="color:#fb7185;border-color:rgba(244,63,94,0.2)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Sign out</button>
-      </div>
-    </aside>
+<!-- TOAST -->
+<div id="toasts"></div>
 
-    <main id="main">
-      <div id="page-root"></div>
-    </main>
-  </div>
+<!-- hidden file inputs -->
+<input type="file" id="bk-file"  accept=".json"       style="display:none" onchange="Data.importBackup(event)"/>
+<input type="file" id="xl-file"  accept=".xlsx,.xls"  style="display:none"/>
 
-  <!-- Drawer -->
-  <div id="drawer-overlay" onclick="closeDrawer()"></div>
-  <aside id="drawer"><div id="drawer-inner"></div></aside>
-
-  <!-- Toast -->
-  <div id="toast-container"></div>
-
-  <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImport(event)"/>
-
-  <!-- SheetJS for Excel -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
-  <script src="src/js/auth.js"></script>
-  <script src="src/js/store.js"></script>
-  <script src="src/js/icons.js"></script>
-  <script src="src/js/utils.js"></script>
-  <script src="src/js/drawer.js"></script>
-  <script src="src/js/pages/dashboard.js"></script>
-  <script src="src/js/pages/invoices.js"></script>
-  <script src="src/js/pages/tally.js"></script>
-  <script src="src/js/pages/stock.js"></script>
-  <script src="src/js/pages/skus.js"></script>
-  <script src="src/js/app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="src/js/auth.js"></script>
+<script src="src/js/store.js"></script>
+<script src="src/js/validate.js"></script>
+<script src="src/js/ui.js"></script>
+<script src="src/js/data.js"></script>
+<script src="src/js/pages/dashboard.js"></script>
+<script src="src/js/pages/lots.js"></script>
+<script src="src/js/pages/lot-detail.js"></script>
+<script src="src/js/pages/skus.js"></script>
+<script src="src/js/nav.js"></script>
 </body>
 </html>
