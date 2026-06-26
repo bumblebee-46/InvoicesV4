@@ -1,7 +1,7 @@
 'use strict';
 // ── Credentials — change these to update login ──────────────────
 // To change: edit the values below and re-upload to GitHub
-const AUTH = { user: 'admin', pass: 'v4loreal2024' };
+const AUTH = { user: 'admin', pass: 'v4loreal2026' };
 
 function doLogin() {
   const u = document.getElementById('l-user')?.value.trim();
