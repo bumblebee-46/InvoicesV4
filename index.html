@@ -2,109 +2,132 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>V4 · Supply Chain Validator</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%236366f1'/><text y='22' x='4' font-size='15' font-weight='700' fill='white' font-family='Inter,sans-serif'>V4</text></svg>"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="src/css/app.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <!-- Token system → components → layout. Order matters. -->
+  <link rel="stylesheet" href="src/css/tokens.css"/>
+  <link rel="stylesheet" href="src/css/components.css"/>
+  <link rel="stylesheet" href="src/css/layout.css"/>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- ══ LOGIN ══════════════════════════════════════ -->
 <div id="login-screen">
-  <div class="login-card">
-    <div class="login-brand">
-      <div class="logo-mark">V4</div>
+  <div class="login-wrap">
+    <div class="login-logo">
+      <div class="logo-mark logo-mark-lg">V4</div>
       <div>
-        <div class="login-title">Supply Chain Validator</div>
-        <div class="login-sub">L'Oréal Professional · India → UK</div>
+        <div class="login-product">Supply Chain Validator</div>
+        <div class="login-tagline">L'Oréal Professional · India → United Kingdom</div>
       </div>
     </div>
-    <div class="field-group">
-      <label class="field-label">Username</label>
-      <input class="field-input" id="l-user" type="text" placeholder="Username" autocomplete="username" onkeydown="if(event.key==='Enter')$id('l-pass').focus()"/>
+    <div class="login-card">
+      <div class="login-heading">Sign in to continue</div>
+      <div class="field" style="margin-bottom:var(--sp-3)">
+        <label class="field-label">Username</label>
+        <input class="input" id="l-user" type="text" placeholder="Enter username" autocomplete="username"
+          onkeydown="if(event.key==='Enter')$id('l-pass').focus()"/>
+      </div>
+      <div class="field">
+        <label class="field-label">Password</label>
+        <input class="input" id="l-pass" type="password" placeholder="Enter password" autocomplete="current-password"
+          onkeydown="if(event.key==='Enter')Auth.login()"/>
+      </div>
+      <div id="l-err" class="login-error" hidden>Incorrect username or password</div>
+      <button class="btn btn-primary btn-lg btn-full" style="margin-top:var(--sp-5);justify-content:center" onclick="Auth.login()">
+        Sign in
+      </button>
     </div>
-    <div class="field-group" style="margin-top:12px">
-      <label class="field-label">Password</label>
-      <input class="field-input" id="l-pass" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')Auth.login()"/>
-    </div>
-    <div id="login-err" class="login-err" hidden>Incorrect credentials</div>
-    <button class="btn btn-primary" style="width:100%;margin-top:18px;justify-content:center" onclick="Auth.login()">Sign in</button>
+    <div class="login-footer">V4 Supply Chain · Confidential</div>
   </div>
 </div>
 
-<!-- APP -->
+<!-- ══ APP ════════════════════════════════════════ -->
 <div id="app" hidden>
+
+  <!-- Sidebar -->
   <aside id="sidebar">
     <div class="sb-brand">
-      <div class="logo-mark sm">V4</div>
-      <div>
-        <div class="sb-title">Supply Chain</div>
-        <div class="sb-sub">Validator</div>
+      <div class="logo-mark">V4</div>
+      <div class="sb-brand-text">
+        <span class="sb-product">Supply Chain</span>
+        <span class="sb-tagline">Validator</span>
       </div>
     </div>
+
     <nav class="sb-nav">
-      <a class="sb-link active" data-page="dashboard" onclick="Nav.go('dashboard')">
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5"/></svg>
-        Dashboard
+      <span class="sb-section">Operations</span>
+
+      <a class="sb-item active" data-page="dashboard" onclick="Nav.go('dashboard')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+        <span>Dashboard</span>
       </a>
-      <a class="sb-link" data-page="lots" onclick="Nav.go('lots')">
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6l7-3 7 3v8l-7 3-7-3V6z"/><path d="M10 3v14M3 6l7 3 7-3"/></svg>
-        Shipment Lots
-        <span class="sb-pill" id="sb-lots">0</span>
+
+      <a class="sb-item" data-page="lots" onclick="Nav.go('lots')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        <span>Shipment Lots</span>
+        <span class="sb-item-count" id="cnt-lots">0</span>
       </a>
-      <a class="sb-link" data-page="skus" onclick="Nav.go('skus')">
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="16" height="12" rx="1.5"/><line x1="2" y1="9" x2="18" y2="9"/><line x1="6" y1="9" x2="6" y2="17"/></svg>
-        SKU Master
-        <span class="sb-pill" id="sb-skus">0</span>
+
+      <span class="sb-section">Master Data</span>
+
+      <a class="sb-item" data-page="skus" onclick="Nav.go('skus')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <span>SKU Master</span>
+        <span class="sb-item-count" id="cnt-skus">0</span>
       </a>
     </nav>
+
     <div class="sb-footer">
-      <button class="sb-btn" onclick="Data.exportBackup()">
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 13V3m-4 6l4 4 4-4"/><path d="M3 15v1a1 1 0 001 1h12a1 1 0 001-1v-1"/></svg>
-        Export backup
+      <button class="sb-footer-btn" onclick="Data.exportBackup()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Export backup</span>
       </button>
-      <button class="sb-btn" onclick="$id('bk-file').click()">
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 7v10m-4-4l4 4 4-4"/><path d="M3 5V4a1 1 0 011-1h12a1 1 0 011 1v1"/></svg>
-        Import backup
+      <button class="sb-footer-btn" onclick="$id('bk-in').click()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span>Import backup</span>
       </button>
-      <button class="sb-btn danger" onclick="Auth.logout()">
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 3h4a1 1 0 011 1v12a1 1 0 01-1 1h-4M8 14l4-4-4-4M12 10H2"/></svg>
-        Sign out
+      <button class="sb-footer-btn danger" onclick="Auth.logout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Sign out</span>
       </button>
     </div>
   </aside>
 
+  <!-- Main content -->
   <main id="main">
     <div id="page-root"></div>
   </main>
-</div>
 
-<!-- DRAWER -->
-<div id="drawer-bg" onclick="Drawer.close()"></div>
-<div id="drawer">
+</div><!-- /#app -->
+
+<!-- ══ DRAWER ══════════════════════════════════════ -->
+<div id="drawer-scrim" onclick="Drawer.close()"></div>
+<aside id="drawer" role="dialog" aria-modal="true">
   <div id="drawer-inner"></div>
-</div>
+</aside>
 
-<!-- TOAST -->
-<div id="toasts"></div>
+<!-- ══ TOAST ═══════════════════════════════════════ -->
+<div id="toast-root" aria-live="polite"></div>
 
-<!-- hidden file inputs -->
-<input type="file" id="bk-file"  accept=".json"       style="display:none" onchange="Data.importBackup(event)"/>
-<input type="file" id="xl-file"  accept=".xlsx,.xls"  style="display:none"/>
+<!-- ══ HIDDEN INPUTS ════════════════════════════════ -->
+<input type="file" id="bk-in" accept=".json" style="display:none" onchange="Data.importBackup(event)"/>
 
+<!-- ══ SCRIPTS ══════════════════════════════════════ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="src/js/auth.js"></script>
-<script src="src/js/store.js"></script>
-<script src="src/js/validate.js"></script>
-<script src="src/js/ui.js"></script>
-<script src="src/js/data.js"></script>
+<script src="src/js/core/store.js"></script>
+<script src="src/js/core/validate.js"></script>
+<script src="src/js/core/ui.js"></script>
+<script src="src/js/core/data.js"></script>
 <script src="src/js/pages/dashboard.js"></script>
 <script src="src/js/pages/lots.js"></script>
 <script src="src/js/pages/lot-detail.js"></script>
 <script src="src/js/pages/skus.js"></script>
 <script src="src/js/nav.js"></script>
+
 </body>
 </html>
